@@ -32,6 +32,7 @@ docs/PROCESS-CHANGES.md          # what changed between failure and delivery
 docs/EVIDENCE.md                 # proof boundaries and integrity handles
 docs/SAFETY.md                   # scope and handling rules
 scripts/verify-package.sh        # offline package verification
+tests/test_verifier_schema.py    # current exploitId/permalink response compatibility
 ```
 
 The solve is a three-program pipeline, not one standalone script:
@@ -122,7 +123,7 @@ See [docs/PROCESS-CHANGES.md](docs/PROCESS-CHANGES.md) for the full causal accou
 scripts/verify-package.sh
 ```
 
-This performs syntax/import checks, verifies the byte-identical accepted controller, and builds the terminal bodies in `--dry-run` mode. It sends no network traffic.
+This performs syntax/import checks, verifies the byte-identical accepted controller, tests the current verifier `exploitId`/permalink schema, and builds the terminal bodies in `--dry-run` mode. It sends no network traffic.
 
 ## Proof boundary
 

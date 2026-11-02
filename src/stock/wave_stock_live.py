@@ -31,6 +31,9 @@ VERIFY_PATH = "/api/verify"
 BLOCK = 0x59400
 S_HEADERS = 600_000
 D_HEADERS = 402_500
+EXPLOIT_ID_RE = re.compile(
+    r"(?i)^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$"
+)
 
 
 def attempt_id(raw: bytes) -> str:
@@ -162,10 +165,19 @@ def verify_flag(attempt: str, flag: str, timeout: float):
     except Exception:
         document = {}
     status = int(status_match.group(1)) if status_match else 0
+    exploit_id = document.get("exploitId") if isinstance(document, dict) else None
+    if not isinstance(exploit_id, str) or not EXPLOIT_ID_RE.fullmatch(exploit_id):
+        exploit_id = None
+    permalink = document.get("permalink") if isinstance(document, dict) else None
+    if not isinstance(permalink, str) or not permalink:
+        permalink = (
+            f"https://{HOST}/exploits/{exploit_id}" if exploit_id is not None else None
+        )
     return {
         "status": status,
         "verified": status == 200 and isinstance(document, dict) and document.get("verified") is True,
-        "permalink": document.get("permalink"),
+        "exploit_id": exploit_id,
+        "permalink": permalink,
         "response_sha256": hashlib.sha256(raw).hexdigest(),
         "body": entity.decode("utf-8", "replace")[:1000],
     }, raw

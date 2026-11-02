@@ -25,6 +25,7 @@ PY
 python3 -B src/stock/flood_heap_oracle_live.py --help >/dev/null
 python3 -B src/native/code_dtor_fatal_probe.py --help >/dev/null
 python3 -B src/stock/rolling_seedfire_stable25_live.py --help >/dev/null
+python3 -B -m unittest tests/test_verifier_schema.py >/dev/null
 
 tmp_root="$(mktemp -d "${TMPDIR:-/tmp}/cfctf-package.XXXXXX")"
 trap 'rm -rf -- "$tmp_root"' EXIT
@@ -39,4 +40,5 @@ python3 -B src/stock/rolling_seedfire_stable25_live.py \
 
 printf 'accepted-controller: ok\n'
 printf 'imports: ok\n'
+printf 'verifier schema: ok\n'
 printf 'terminal dry-run: ok\n'
